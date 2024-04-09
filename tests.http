@@ -8,3 +8,15 @@ Content-Type: application/json
 #    packagebase64 = data["packagebase64"]
 #  "usePUT" : true,
 #    "loadRecursively" : true,
+
+### test 1
+POST http://127.0.0.1:5005/upload-ig
+Content-Type: application/json
+
+{"serverBase": "https://fhir.hl7.pt/r4/fhir",
+   
+"packageURL":"https://build.fhir.org/ig/hl7-eu/extensions-r4/package.tgz"}
+
+#    packagebase64 = data["packagebase64"]
+#  "usePUT" : true,
+#    "loadRecursively" : true,
