@@ -39,7 +39,7 @@ def run_command_and_output(command):
 
 @app.route("/", methods=["GET"])
 def hello():
-    return render_template("index.html", result="")
+    return "Hello, World!"
 
 
 # https://github.com/jkiddo/ember
