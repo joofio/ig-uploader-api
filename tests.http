@@ -20,3 +20,10 @@ Content-Type: application/json
 #    packagebase64 = data["packagebase64"]
 #  "usePUT" : true,
 #    "loadRecursively" : true,
+
+### test 1
+POST https://sandbox.hl7europe.eu/ig-uploader-api/upload-ig
+Content-Type: application/json
+
+{"serverBase": "https://fhir.hl7.pt/r4/fhir",
+    "packageId" : "hl7.fhir.eu.laboratory"}

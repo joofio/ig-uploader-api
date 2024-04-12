@@ -47,7 +47,7 @@ def hello():
 </head>
 <body>
     <h1>IG Uploader</h1>
-    <p>Check <a href="/apidocs">here</a> for docs</p>
+    <p>Check <a href="apidocs">here</a> for docs</p>
                                   <p>This is a wrapper around <a href="https://github.com/jkiddo/ember">https://github.com/jkiddo/ember</a></p>
 </body>
 </html>""")
