@@ -1,11 +1,12 @@
 #!/usr/bin/python
 
-from flask import render_template, request, jsonify
+from flask import render_template_string, request, jsonify
 from uploader_app import app
 import subprocess
 import base64
 import re
 import os
+from flasgger import swag_from
 
 print(app.config)
 
@@ -39,12 +40,25 @@ def run_command_and_output(command):
 
 @app.route("/", methods=["GET"])
 def hello():
-    return "Hello, World!"
+    return render_template_string("""<!DOCTYPE html>
+<html>
+<head>
+    <title>Intro Page</title>
+</head>
+<body>
+    <h1>IG Uploader</h1>
+    <p>Check <a href="/apidocs">here</a> for docs</p>
+                                  <p>This is a wrapper around <a href="https://github.com/jkiddo/ember">https://github.com/jkiddo/ember</a></p>
+</body>
+</html>""")
 
 
 # https://github.com/jkiddo/ember
 @app.route("/upload-ig", methods=["POST"])
 def upig():
+    """
+    file: docs/upload-ig.yml
+    """
     data = request.json
     # print(data)
     serverBase = data["serverBase"]
