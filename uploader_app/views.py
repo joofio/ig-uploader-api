@@ -1,14 +1,14 @@
 #!/usr/bin/python
 
-from flask import render_template_string, request, jsonify
+from flask import render_template_string, request, jsonify, Blueprint
 from uploader_app import app
 import subprocess
 import base64
 import re
 import os
-from flasgger import swag_from
 
 print(app.config)
+bp = Blueprint("burritos", __name__)
 
 
 def run_command_and_output(command):
@@ -38,7 +38,7 @@ def run_command_and_output(command):
     return parsed_content, error_content, hapi_error, error
 
 
-@app.route("/", methods=["GET"])
+@bp.route("/", methods=["GET"])
 def hello():
     return render_template_string("""<!DOCTYPE html>
 <html>
@@ -54,7 +54,7 @@ def hello():
 
 
 # https://github.com/jkiddo/ember
-@app.route("/upload-ig", methods=["POST"])
+@bp.route("/upload-ig", methods=["POST"])
 def upig():
     """
     file: docs/upload-ig.yml
@@ -150,3 +150,6 @@ def upig():
                 "message": "Package has been uploaded successfully",
             }
         )
+
+
+app.register_blueprint(bp, url_prefix="/ig-uploader-api")
