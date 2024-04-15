@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from flask import render_template_string, request, jsonify, Blueprint
+from flask import render_template, request, jsonify, Blueprint
 from uploader_app import app
 import subprocess
 import base64
@@ -38,46 +38,9 @@ def run_command_and_output(command):
     return parsed_content, error_content, hapi_error, error
 
 
-@bp.route("/", methods=["GET"])
-def hello():
-    return render_template_string("""<!DOCTYPE html>
-<html>
-<head>
-    <title>Intro Page</title>
-</head>
-<body>
-    <h1>IG Uploader</h1>
-    <p>Check <a href="apidocs">here</a> for docs</p>
-                                  <p>This is a wrapper around <a href="https://github.com/jkiddo/ember">https://github.com/jkiddo/ember</a></p>
-</body>
-</html>""")
-
-
-# https://github.com/jkiddo/ember
-@bp.route("/upload-ig", methods=["POST"])
-def upig():
-    """
-    file: docs/upload-ig.yml
-    """
-    data = request.json
-    # print(data)
-    serverBase = data["serverBase"]
-    packageId = data.get("packageId", None)
-    usePUT = data.get("usePUT", True)
-    loadRecursively = data.get("loadRecursively", False)
-    packagebase64 = data.get("packagebase64", None)
-    packageURL = data.get("packageURL", None)
-    print([packageId is not None, packagebase64 is not None, packageURL is not None])
-    if (
-        sum([packageId is not None, packagebase64 is not None, packageURL is not None])
-        > 1
-    ):
-        return (
-            "Only 1 of Package ID OR package base64 OR package URL must be provided. Not more than 1.",
-            404,
-        )
-    if not serverBase:
-        return "Server base must be provided.", 404
+def logic_for_creation(
+    packagebase64, packageId, packageURL, serverBase, usePUT, loadRecursively
+):
     if packagebase64:
         # Create folder if it doesn't exist
         if not os.path.exists("tmp"):
@@ -135,21 +98,80 @@ def upig():
         )
 
     if error:
-        return jsonify(
-            {
-                "result": "ERROR",
-                "parsed_content": parsed_content,
-                "raw_message": error_content,
-                "hapi_error": hapi_error,
-            }
-        ), 500
+        return {
+            "result": "ERROR",
+            "parsed_content": parsed_content,
+            "raw_message": error_content,
+            "hapi_error": hapi_error,
+        }
+
     else:
-        return jsonify(
-            {
-                "result": "Success",
-                "message": "Package has been uploaded successfully",
-            }
+        return {
+            "result": "Success",
+            "message": "Package has been uploaded successfully",
+        }
+
+
+@bp.route("/", methods=["GET", "POST"])
+def hello():
+    if request.method == "POST":
+        data = request.form
+        packagebase64 = None
+        packageId = None
+        packageURL = None
+        print(data)
+        serverBase = data["serverBase"]
+        # print(data.get("detailInput", None))
+        options = data.get("options", None)
+        print(options)
+        if options == "packagebase64":
+            packagebase64 = data.get("detailInput", None)
+        elif options == "packageId":
+            packageId = data.get("detailInput", None)
+        elif options == "packageURL":
+            packageURL = data.get("detailInput", None)
+
+        usePUT = data.get("usePUT", True)
+        loadRecursively = data.get("loadRecursively", False)
+        print(packagebase64, packageId, packageURL, serverBase, usePUT, loadRecursively)
+        stuff = logic_for_creation(
+            packagebase64, packageId, packageURL, serverBase, usePUT, loadRecursively
         )
+        print(stuff)
+        return render_template("index.html", result=stuff)
+    else:
+        return render_template("index.html")
+
+
+# https://github.com/jkiddo/ember
+@bp.route("/upload-ig", methods=["POST"])
+def upig():
+    """
+    file: docs/upload-ig.yml
+    """
+    data = request.json
+    print(data)
+    serverBase = data["serverBase"]
+    packageId = data.get("packageId", None)
+    usePUT = data.get("usePUT", True)
+    loadRecursively = data.get("loadRecursively", False)
+    packagebase64 = data.get("packagebase64", None)
+    packageURL = data.get("packageURL", None)
+    print([packageId is not None, packagebase64 is not None, packageURL is not None])
+    if (
+        sum([packageId is not None, packagebase64 is not None, packageURL is not None])
+        > 1
+    ):
+        return (
+            "Only 1 of Package ID OR package base64 OR package URL must be provided. Not more than 1.",
+            404,
+        )
+    if not serverBase:
+        return "Server base must be provided.", 404
+
+    return logic_for_creation(
+        packagebase64, packageId, packageURL, serverBase, usePUT, loadRecursively
+    )
 
 
 app.register_blueprint(bp, url_prefix="/ig-uploader-api")

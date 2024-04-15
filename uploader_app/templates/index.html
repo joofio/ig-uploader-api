@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/main.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
+        crossorigin="anonymous"></script>
+
+
+        <style>
+            .container {
+                margin-top: 20px;
+            }
+    
+            #upload-form {
+                margin-top: 50px;
+                padding: 20px;
+
+            }
+    
+            #download-link {
+                margin-top: 100px; /* More space above the download link */
+                display: block; /* Makes the link take its own line */
+            }
+    
+            #loading-indicator {
+                margin-top: 20px;
+            }
+    .inline-form {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        </style>
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+    <h1></h1>
+    
+    <div class="container">
+  <h1>IG Uploader</h1>
+  <br/>
+<br/>
+<br/>
+  <h3>Quick reference</h3>
+  <ol>
+    <li> Check <a href="apidocs">here</a> for docs</li>
+    <li> This is a wrapper around <a href="https://github.com/jkiddo/ember">https://github.com/jkiddo/ember</a></li>
+  </ol>
+
+  <h2>Configuration Form</h2>
+  <form method="POST" role="form">
+    <!-- Checkbox for usePUT -->
+      <label for="usePUT">Use PUT:</label>
+      <input type="checkbox" id="usePUT" name="usePUT">
+      <br><br>
+  
+      <!-- Checkbox for importDependencies -->
+      <label for="loadRecursively">Import Dependencies:</label>
+      <input type="checkbox" id="loadRecursively" name="loadRecursively" checked>
+      <br><br>
+  
+      <!-- Text input for baseServer -->
+      <label for="serverBase">Base Server (mandatory):</label>
+      <input type="text" id="serverBase" name="serverBase" required>
+      <br><br>
+  
+      <div class="inline-form">
+
+      <!-- Dropdown select with linked input field -->
+      <label for="options">Type of Package:</label>
+      <select id="options" name="options">
+          <option value="packageId">Package ID</option>
+          <option value="packageURL">Package URL</option>
+          <option value="packagebase64">Package Base 64</option>
+      </select>
+      <br><br>
+  
+      <label for="detailInput">Data for the type of package</label>
+      <input type="text" id="detailInput" name="detailInput" required>
+      <br><br>
+  </div>
+      <input type="submit" value="Submit" id="upload-btn">
+  </form>
+
+<div class="container-fluid">
+    {% if result %}
+<h3>{{result["result"]}}</h3>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+
+        <th scope="col">Level</th>
+        <th scope="col">Message</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    {% for foo in result["parsed_content"] %}
+    <tr >
+        <th scope="row">{{loop.index}}</th>
+
+        <td class="{{foo["level"]}}level">{{ foo[0] }}</td>
+        <td>{{ foo[1] }}</td>
+
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+    </div>
+
+  <br>
+{% endif %}
+</div>  
+
+
+</body>
+
+<script>
+
+
+</script>
+
+</html>
+
+
