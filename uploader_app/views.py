@@ -11,8 +11,34 @@ print(app.config)
 bp = Blueprint("burritos", __name__)
 
 
+def parse_message(error_content):
+    pattern = "\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z"
+
+    dd = re.split(pattern, error_content)
+
+    final_data = []
+
+    # Regex pattern to match the start of each log entry
+    log_pattern = r"""(INFO|WARN|ERROR)                              # Log Level
+    \s+
+    (\d+)                                          # Process ID
+    \s+---\s+
+    \[\s*([^\]]+)\s*\]                             # Thread
+    \s+
+    ([\w\.\$]+)                                    # Logger Name
+    \s+:\s+
+    (.+)                                           # Message
+    """
+
+    for d in dd[1:]:
+        # print(d)
+        final_data.append(re.search(log_pattern, d, re.VERBOSE | re.DOTALL).groups())
+        # print("..." * 100)
+    return final_data
+
+
 def run_command_and_output(command):
-    pattern = r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\s{0,2}(\w+)\s{1}\d{1}\s{1}\-\-\-\s{1}\[.+\] (.+)"
+    # pattern = r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\s{0,2}(\w+)\s{1}\d{1}\s{1}\-\-\-\s{1}\[.+\] (.+)"
     hapi_pattern = r"(HAPI-\d{0,4}\: .+\n)"
     error = False
     error_content = ""
@@ -32,7 +58,8 @@ def run_command_and_output(command):
             with open("logs/output.log", "r") as error_file:
                 error_content = error_file.read()
                 print(error_content)
-            parsed_content = re.findall(pattern, error_content, re.MULTILINE)
+
+            parsed_content = parse_message(error_content)
             hapi_error = re.findall(hapi_pattern, error_content, re.MULTILINE)
 
     return parsed_content, error_content, hapi_error, error
@@ -100,8 +127,8 @@ def logic_for_creation(
     if error:
         return {
             "result": "ERROR",
-            "parsed_content": parsed_content,
-            "raw_message": error_content,
+            "parsed_message": parsed_content,
+            "message": error_content,
             "hapi_error": hapi_error,
         }
 
@@ -120,6 +147,7 @@ def hello():
         packageId = None
         packageURL = None
         print(data)
+
         serverBase = data["serverBase"]
         # print(data.get("detailInput", None))
         options = data.get("options", None)
@@ -132,7 +160,11 @@ def hello():
             packageURL = data.get("detailInput", None)
 
         usePUT = data.get("usePUT", True)
+        if usePUT == "on":
+            usePUT = True
         loadRecursively = data.get("loadRecursively", False)
+        if loadRecursively == "on":
+            loadRecursively = True
         print(packagebase64, packageId, packageURL, serverBase, usePUT, loadRecursively)
         stuff = logic_for_creation(
             packagebase64, packageId, packageURL, serverBase, usePUT, loadRecursively

@@ -22,15 +22,22 @@
                 padding: 20px;
 
             }
-    
-            #download-link {
-                margin-top: 100px; /* More space above the download link */
-                display: block; /* Makes the link take its own line */
-            }
-    
-            #loading-indicator {
-                margin-top: 20px;
-            }
+            .WARNlevel {
+    color:#e99425;
+
+  }
+
+  .ERRORlevel {
+    color: #F34e10;
+
+  }
+  .INFOlevel {
+    color:#6b6a68;
+
+  }
+
+
+         
     .inline-form {
         display: flex;
         align-items: center;
@@ -46,25 +53,24 @@
     <div class="container">
   <h1>IG Uploader</h1>
   <br/>
-<br/>
-<br/>
+
   <h3>Quick reference</h3>
   <ol>
     <li> Check <a href="apidocs">here</a> for docs</li>
     <li> This is a wrapper around <a href="https://github.com/jkiddo/ember">https://github.com/jkiddo/ember</a></li>
   </ol>
 
-  <h2>Configuration Form</h2>
+  <h3>Configuration Form</h3>
   <form method="POST" role="form">
     <!-- Checkbox for usePUT -->
-      <label for="usePUT">Use PUT:</label>
-      <input type="checkbox" id="usePUT" name="usePUT">
-      <br><br>
+      <label for="usePUT">Use PUT: </label>
+      <input type="checkbox" id="usePUT" name="usePUT" checked>
+      <br>
   
       <!-- Checkbox for importDependencies -->
       <label for="loadRecursively">Import Dependencies:</label>
-      <input type="checkbox" id="loadRecursively" name="loadRecursively" checked>
-      <br><br>
+      <input type="checkbox" id="loadRecursively" name="loadRecursively" >
+      <br>
   
       <!-- Text input for baseServer -->
       <label for="serverBase">Base Server (mandatory):</label>
@@ -74,11 +80,11 @@
       <div class="inline-form">
 
       <!-- Dropdown select with linked input field -->
-      <label for="options">Type of Package:</label>
+      <label for="options">Type of Package Information:</label>
       <select id="options" name="options">
           <option value="packageId">Package ID</option>
           <option value="packageURL">Package URL</option>
-          <option value="packagebase64">Package Base 64</option>
+          <option value="packagebase64">Package Base64</option>
       </select>
       <br><br>
   
@@ -88,10 +94,19 @@
   </div>
       <input type="submit" value="Submit" id="upload-btn">
   </form>
-
+<br>
 <div class="container-fluid">
     {% if result %}
 <h3>{{result["result"]}}</h3>
+
+{% if result["hapi_error"] %}
+{% for foo in result["hapi_error"] %}
+
+<p>{{foo}}</p>
+{% endfor %}
+
+{% endif %}
+
 
 <table class="table">
     <thead>
@@ -99,17 +114,20 @@
         <th scope="col">#</th>
 
         <th scope="col">Level</th>
+        <th scope="col">Logger</th>
+
         <th scope="col">Message</th>
 
     </tr>
     </thead>
     <tbody>
-    {% for foo in result["parsed_content"] %}
+    {% for foo in result["parsed_message"] %}
     <tr >
         <th scope="row">{{loop.index}}</th>
 
-        <td class="{{foo["level"]}}level">{{ foo[0] }}</td>
-        <td>{{ foo[1] }}</td>
+        <td class="{{foo[0]}}level">{{ foo[0] }}</td>
+        <td>{{ foo[3] }}</td>
+        <td>{{ foo[4] }}</td>
 
     </tr>
     {% endfor %}
@@ -119,6 +137,7 @@
     </div>
 
   <br>
+
 {% endif %}
 </div>  
 
