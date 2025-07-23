@@ -1,0 +1,14 @@
+[Unit]
+Description=IG Uploader API
+After=network.target
+
+[Service]
+WorkingDirectory=/home/joaoalmeida/ig-uploader-api
+ExecStart=/home/joaoalmeida/ig-uploader-api/iguploaderapi/bin/python run.py
+Restart=always
+User=jalmeida
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
