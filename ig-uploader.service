@@ -3,8 +3,8 @@ Description=IG Uploader API
 After=network.target
 
 [Service]
-WorkingDirectory=/home/joaoalmeida/ig-uploader-api
-ExecStart=/home/joaoalmeida/ig-uploader-api/iguploaderapi/bin/python run.py
+WorkingDirectory=/mnt/sandboxes/ig-uploader-api
+ExecStart=/mnt/sandboxes/ig-uploader-api/ig-uploader-venv/bin/python run.py
 Restart=always
 User=jalmeida
 StandardOutput=journal
