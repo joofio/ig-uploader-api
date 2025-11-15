@@ -2,145 +2,330 @@
 <html>
 
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
-        crossorigin="anonymous"></script>
-
-
-        <style>
-            .container {
-                margin-top: 20px;
-            }
-    
-            #upload-form {
-                margin-top: 50px;
-                padding: 20px;
-
-            }
-            .WARNlevel {
-    color:#e99425;
-
-  }
-
-  .ERRORlevel {
-    color: #F34e10;
-
-  }
-  .INFOlevel {
-    color:#6b6a68;
-
-  }
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
+    crossorigin="anonymous"></script>
 
 
-         
-    .inline-form {
-        display: flex;
-        align-items: center;
-        gap: 10px;
+  <style>
+    :root {
+      --primary-color: #0d6efd;
+      --secondary-color: #6c757d;
+      --success-color: #198754;
+      --danger-color: #dc3545;
+      --warning-color: #ffc107;
+      --info-color: #0dcaf0;
+      --light-bg: #f8f9fa;
+      --border-radius: 8px;
     }
 
-        </style>
+    body {
+      background-color: var(--light-bg);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    .container {
+      margin-top: 40px;
+      max-width: 900px;
+    }
+
+    h1 {
+      color: #212529;
+      font-weight: 600;
+      margin-bottom: 2rem;
+    }
+
+    h3 {
+      color: #495057;
+      font-weight: 500;
+      margin-top: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .reference-box {
+      background: white;
+      padding: 1.5rem;
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+      margin-bottom: 2rem;
+    }
+
+    .reference-box ol {
+      margin-bottom: 0;
+      padding-left: 1.5rem;
+    }
+
+    .reference-box li {
+      margin-bottom: 0.5rem;
+    }
+
+    .reference-box a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .reference-box a:hover {
+      text-decoration: underline;
+    }
+
+    form {
+      background: white;
+      padding: 2.5rem;
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      font-weight: 500;
+      color: #495057;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    input[type="text"],
+    select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      border: 2px solid #dee2e6;
+      border-radius: var(--border-radius);
+      transition: all 0.2s ease;
+      background-color: white;
+    }
+
+    input[type="text"]:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .checkbox-group label {
+      margin-bottom: 0;
+      margin-left: 0.5rem;
+      cursor: pointer;
+    }
+
+    input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      accent-color: var(--primary-color);
+    }
+
+    .inline-form {
+      display: grid;
+      grid-template-columns: 1fr 3fr;
+      gap: 1rem;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .inline-form {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    #upload-btn {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 0.875rem 2.5rem;
+      font-size: 1.05rem;
+      font-weight: 500;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 1rem;
+      width: 100%;
+    }
+
+    #upload-btn:hover {
+      background-color: #0b5ed7;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+    }
+
+    #upload-btn:active {
+      transform: translateY(0);
+    }
+
+    .result-box {
+      background: white;
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      margin-top: 2rem;
+    }
+
+    .result-box h3 {
+      margin-top: 0;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--light-bg);
+    }
+
+    .table {
+      margin-top: 1.5rem;
+      background: white;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+    }
+
+    .table thead {
+      background-color: #e9ecef;
+    }
+
+    .table th {
+      font-weight: 600;
+      color: #495057;
+      padding: 1rem;
+    }
+
+    .table td {
+      padding: 0.875rem 1rem;
+      vertical-align: middle;
+    }
+
+    .WARNlevel {
+      color: #e99425;
+      font-weight: 600;
+    }
+
+    .ERRORlevel {
+      color: #dc3545;
+      font-weight: 600;
+    }
+
+    .INFOlevel {
+      color: #6c757d;
+    }
+
+    .alert-message {
+      padding: 1rem;
+      background-color: #f8d7da;
+      border: 1px solid #f5c2c7;
+      border-radius: var(--border-radius);
+      margin-bottom: 1rem;
+      color: #842029;
+    }
+
+    .required-mark {
+      color: var(--danger-color);
+      margin-left: 2px;
+    }
+  </style>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-    <h1></h1>
-    
-    <div class="container">
-  <h1>IG Uploader</h1>
-  <br/>
+  <div class="container">
+    <h1>🚀 IG Uploader</h1>
 
-  <h3>Quick reference</h3>
-  <ol>
-    <li> Check <a href="apidocs">here</a> for docs</li>
-    <li> This is a wrapper around <a href="https://github.com/jkiddo/ember">https://github.com/jkiddo/ember</a></li>
-  </ol>
-
-  <h3>Configuration Form</h3>
-  <form method="POST" role="form">
-    <!-- Checkbox for usePUT -->
-      <label for="usePUT">Use PUT: </label>
-      <input type="checkbox" id="usePUT" name="usePUT" checked>
-      <br>
-  
-      <!-- Checkbox for importDependencies -->
-      <label for="loadRecursively">Import Dependencies:</label>
-      <input type="checkbox" id="loadRecursively" name="loadRecursively" >
-      <br>
-  
-      <!-- Text input for baseServer -->
-      <label for="serverBase">Base Server (mandatory):</label>
-      <input type="text" id="serverBase" name="serverBase" required>
-      <br><br>
-  
-      <div class="inline-form">
-
-      <!-- Dropdown select with linked input field -->
-      <label for="options">Type of Package Information:</label>
-      <select id="options" name="options">
-          <option value="packageId">Package ID</option>
-          <option value="packageURL">Package URL</option>
-          <option value="packagebase64">Package Base64</option>
-      </select>
-      <br><br>
-  
-      <label for="detailInput">Data for the type of package</label>
-      <input type="text" id="detailInput" name="detailInput" required>
-      <br><br>
-  </div>
-      <input type="submit" value="Submit" id="upload-btn">
-  </form>
-<br>
-<div class="container-fluid">
-    {% if result %}
-<h3>{{result["result"]}}</h3>
-
-{% if result["hapi_error"] %}
-{% for foo in result["hapi_error"] %}
-
-<p>{{foo}}</p>
-{% endfor %}
-
-{% endif %}
-
-
-<table class="table">
-    <thead>
-    <tr>
-        <th scope="col">#</th>
-
-        <th scope="col">Level</th>
-        <th scope="col">Logger</th>
-
-        <th scope="col">Message</th>
-
-    </tr>
-    </thead>
-    <tbody>
-    {% for foo in result["parsed_message"] %}
-    <tr >
-        <th scope="row">{{loop.index}}</th>
-
-        <td class="{{foo[0]}}level">{{ foo[0] }}</td>
-        <td>{{ foo[3] }}</td>
-        <td>{{ foo[4] }}</td>
-
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
-
+    <div class="reference-box">
+      <h3>📚 Quick Reference</h3>
+      <ol>
+        <li>Check <a href="apidocs">here</a> for API documentation</li>
+        <li>This is a wrapper around <a href="https://github.com/jkiddo/ember"
+            target="_blank">github.com/jkiddo/ember</a></li>
+      </ol>
     </div>
 
-  <br>
+    <h3>⚙️ Configuration Form</h3>
+    <form method="POST" role="form">
+      <div class="form-group">
+        <div class="checkbox-group">
+          <input type="checkbox" id="usePUT" name="usePUT" checked>
+          <label for="usePUT">Use PUT method</label>
+        </div>
+        <div class="checkbox-group">
+          <input type="checkbox" id="loadRecursively" name="loadRecursively">
+          <label for="loadRecursively">Import Dependencies</label>
+        </div>
+      </div>
 
-{% endif %}
-</div>  
+      <div class="form-group">
+        <label for="serverBase">
+          Base Server <span class="required-mark">*</span>
+        </label>
+        <input type="text" id="serverBase" name="serverBase" placeholder="https://example.com/fhir" required>
+      </div>
 
+      <div class="inline-form">
+        <div class="form-group">
+          <label for="options">Package Information Type</label>
+          <select id="options" name="options">
+            <option value="packageId">Package ID</option>
+            <option value="packageURL">Package URL</option>
+            <option value="packagebase64">Package Base64</option>
+          </select>
+        </div>
 
+        <div class="form-group">
+          <label for="detailInput">
+            Package Data <span class="required-mark">*</span>
+          </label>
+          <input type="text" id="detailInput" name="detailInput" placeholder="Enter package details" required>
+        </div>
+      </div>
+
+      <input type="submit" value="Upload Package" id="upload-btn">
+    </form>
+
+    {% if result %}
+    <div class="result-box">
+      <h3>📊 Upload Results</h3>
+      <p><strong>Status:</strong> {{result["result"]}}</p>
+
+      {% if result["hapi_error"] %}
+      <div class="alert-message">
+        <strong>⚠️ Errors:</strong>
+        {% for foo in result["hapi_error"] %}
+        <p>{{foo}}</p>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if result["parsed_message"] %}
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Level</th>
+            <th scope="col">Logger</th>
+            <th scope="col">Message</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for foo in result["parsed_message"] %}
+          <tr>
+            <th scope="row">{{loop.index}}</th>
+            <td class="{{foo[0]}}level">{{ foo[0] }}</td>
+            <td>{{ foo[3] }}</td>
+            <td>{{ foo[4] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
 </body>
 
 <script>
@@ -149,5 +334,3 @@
 </script>
 
 </html>
-
-
