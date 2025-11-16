@@ -5,7 +5,7 @@ RUN mkdir /app
 WORKDIR /app
 
 
-COPY lens_app /app
+COPY uploader_app /app
 
 ENV VIRTUAL_ENV=/usr/local
 RUN python3 -m pip install pip --upgrade
