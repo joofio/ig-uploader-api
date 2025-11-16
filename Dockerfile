@@ -15,7 +15,7 @@ COPY requirements.txt /app
 COPY run.py /app
 COPY gunicorn.sh /app
 
-RUN uv pip install -r requirements.txt
+RUN uv pip install --system -r requirements.txt
 
 EXPOSE 80
 
