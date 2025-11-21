@@ -181,11 +181,17 @@
       border-bottom: 2px solid var(--light-bg);
     }
 
-    .table {
+    .table-wrapper {
+      overflow-x: auto;
       margin-top: 1.5rem;
-      background: white;
       border-radius: var(--border-radius);
-      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .table {
+      margin-bottom: 0;
+      background: white;
+      width: 100%;
     }
 
     .table thead {
@@ -201,6 +207,8 @@
     .table td {
       padding: 0.875rem 1rem;
       vertical-align: middle;
+      word-break: break-word;
+      max-width: 400px;
     }
 
     .WARNlevel {
@@ -302,26 +310,28 @@
       {% endif %}
 
       {% if result["parsed_message"] %}
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Level</th>
-            <th scope="col">Logger</th>
-            <th scope="col">Message</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for foo in result["parsed_message"] %}
-          <tr>
-            <th scope="row">{{loop.index}}</th>
-            <td class="{{foo[0]}}level">{{ foo[0] }}</td>
-            <td>{{ foo[3] }}</td>
-            <td>{{ foo[4] }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+      <div class="table-wrapper">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Level</th>
+              <th scope="col">Logger</th>
+              <th scope="col">Message</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for foo in result["parsed_message"] %}
+            <tr>
+              <th scope="row">{{loop.index}}</th>
+              <td class="{{foo[0]}}level">{{ foo[0] }}</td>
+              <td>{{ foo[3] }}</td>
+              <td>{{ foo[4] }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
       {% endif %}
     </div>
     {% endif %}
